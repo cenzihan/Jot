@@ -1,9 +1,9 @@
 {
   "name": "jot-desktop",
   "productName": "Jot",
-  "version": "0.6.9",
+  "version": "0.6.10",
   "description": "Jot",
-  "main": "main.js",
+  "main": "src/main.js",
   "author": "Jot",
   "license": "MIT",
   "scripts": {
@@ -13,7 +13,7 @@
     "package": "node build.cjs"
   },
   "devDependencies": {
-    "@electron/packager": "20.4.0",
+    "@electron/packager": "20.3.0",
     "electron": "44.4.3",
     "playwright": "1.63.0"
   },

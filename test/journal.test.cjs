@@ -1,4 +1,4 @@
-const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os');const {Store,stats}=require('../core');
+const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os');const {Store,stats}=require('../src/core');
 function fixture(fn){const dir=fs.mkdtempSync(path.join(os.tmpdir(),'jot-notes-'));try{return fn(new Store(dir),dir);}finally{fs.rmSync(dir,{recursive:true,force:true});}}
 test('ordinary note is not a completion; completion/reopen/delete/undo are consistent',()=>fixture(s=>{
 const note=s.act({kind:'note',op:'add',data:{title:'想到一个点子'}}).result;assert.equal(stats(s.state).today,0);assert.equal(s.state.logs.length,0);

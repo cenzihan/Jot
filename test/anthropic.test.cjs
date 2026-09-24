@@ -1,7 +1,7 @@
 const {test}=require('node:test'),assert=require('node:assert/strict');
-const {toAnthropic,normalize,readAnthropic}=require('../anthropic');
-const {Services}=require('../services');
-const {Store}=require('../core');
+const {toAnthropic,normalize,readAnthropic}=require('../src/anthropic');
+const {Services}=require('../src/services');
+const {Store}=require('../src/core');
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path');
 
 test('Anthropic request maps system, tool use and tool result',()=>{

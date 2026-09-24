@@ -96,6 +96,7 @@ const http=require('node:http');
     await page.locator('[data-capsule-theme=black]').click();
     await page.waitForFunction(async()=>(await window.shiban.call('state')).value.settings.capsuleTheme==='black');
     assert.ok((await page.locator('.skin-preview').innerText()).includes('Black Default'));
+    await page.locator('.skin-preview').screenshot({path:path.join(__dirname,'../qa/default-black.png'),animations:'disabled'});
     const pet=app.windows().find(w=>w.url().endsWith('pet.html'));
     assert.ok(pet,'desktop capsule exists');
     for(const [theme,isWhite] of [['black-logo',false],['white-logo',true]]){

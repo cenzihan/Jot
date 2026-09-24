@@ -1,6 +1,6 @@
-# Jot 接口与数据约定（0.6.9）
+# Jot 接口与数据约定（0.6.10）
 
-Jot **没有公开的 HTTP 服务**。下述 `manage_record` 是应用发给所配置对话模型的 OpenAI 兼容函数工具；真正的数据写入由 `core.js` 在本地执行。其他程序不能仅凭此文档远程访问用户数据库。
+Jot **没有公开的 HTTP 服务**。下述 `manage_record` 是应用发给所配置对话模型的 OpenAI 兼容函数工具；真正的数据写入由 `src/core.js` 在本地执行。其他程序不能仅凭此文档远程访问用户数据库。
 
 ## 当前记录类型
 
@@ -77,7 +77,7 @@ Jot **没有公开的 HTTP 服务**。下述 `manage_record` 是应用发给所�
 | `source-add/toggle/remove/scan` | 来源或 ID | 选择、启用、移除、汇总本地 Agent 会话 |
 | `export` | `json`, `md`, `csv` | 打开保存对话框并生成无密钥导出 |
 
-完整白名单见 `preload.js`。状态变更广播 `changed`；聊天流通过 `chat-progress` 发送 `reset`、`text`、`status`、`done`。IPC 不是外部 API，不应向任意远程网页暴露。
+完整白名单见 `src/preload.js`。状态变更广播 `changed`；聊天流通过 `chat-progress` 发送 `reset`、`text`、`status`、`done`。IPC 不是外部 API，不应向任意远程网页暴露。
 
 记忆卡通过 `settings.chat.memoryStable`（最多 1500 字）和 `settings.chat.memoryRecent`（最多 1000 字）保存。两者在对话时作为低于当前任务规则的背景信息提供给模型；不会自动改动 Todo、Today 或日志。设置界面采用分栏和自动保存：一般选项改变即保存，长文本停止输入后保存，密钥失焦后保存。自动生成近期摘要需要用户主动点击；结果保存前不会影响对话，界面提供撤销。
 

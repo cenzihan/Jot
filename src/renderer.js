@@ -42,7 +42,7 @@ let state,
 let selectedDay=day(Date.now()),calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);
 const leftTools=document.createElement('div');leftTools.className='topbar-left';
 const gearButton=$('#settings-button');gearButton.before(leftTools);leftTools.append(gearButton);
-leftTools.insertAdjacentHTML('afterbegin','<button id="home-logo" class="icon-button" data-page="today" aria-label="Jot 首页" title="Jot"><img src="assets/jot-mark.svg" alt="Jot"></button>');
+leftTools.insertAdjacentHTML('afterbegin','<button id="home-logo" class="icon-button" data-page="today" aria-label="Jot 首页" title="Jot"><img src="../assets/jot-mark.svg" alt="Jot"></button>');
 leftTools.insertAdjacentHTML('beforeend','<button id="calendar-button" class="icon-button" data-page="calendar" aria-label="日历日志" title="日历日志"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v5m10-5v5M3 11h18m-13 4h2m4 0h2m-8 3h2"/></svg></button>');
 $('#completed-field').insertAdjacentHTML('beforebegin','<label id="recorded-field" hidden>记录时间<input name="recordedAt" type="datetime-local"></label>');
 const oldModelLabel=$('#model-label');
@@ -268,7 +268,7 @@ function settingsView() {
   const capsuleLogo=capsuleTheme.endsWith('-logo');
   const petPreview=state.petData&&!s.minimal
     ? `<div class="preview-sprite" style="background-image:url('${esc(state.petData.url)}');background-size:${state.petData.rows?'496px '+(67*state.petData.rows)+'px':'contain'}"></div>`
-    : `<div class="capsule-preview ${capsuleTheme.startsWith('white')?'white':''}">${capsuleLogo?'<img class="capsule-preview-logo" src="assets/jot-mark.svg" alt="">':'<span class="capsule-preview-wordmark">Jot</span>'}<span>≋</span><span>⌄</span></div>`;
+    : `<div class="capsule-preview ${capsuleTheme.startsWith('white')?'white':''}">${capsuleLogo?'<img class="capsule-preview-logo" src="../assets/jot-mark.svg" alt="">':'<span class="capsule-preview-wordmark">Jot</span>'}<span>≋</span><span>⌄</span></div>`;
   return `<div class="settings-links"><button data-page="log">完成日志与统计</button><button data-page="sources">Agent 记录来源</button></div>
   <form id="settings-form">
   <section class="settings-section"><h3>对话模型</h3><p>兼容 Chat Completions 工具调用。密钥加密保存在本机，留空可保持现有密钥。</p>

@@ -572,7 +572,7 @@ async function start() {
     quitting = true;
     app.quit();
   });
-  await Promise.all([pet.loadFile("pet.html"), panel.loadFile("index.html")]);
+  await Promise.all([pet.loadFile(path.join(__dirname,"pet.html")), panel.loadFile(path.join(__dirname,"index.html"))]);
   if (!TEST) gazeTimer = setInterval(() => {
     if (
       !pet.isVisible() ||
@@ -590,7 +590,7 @@ async function start() {
   }, 140);
   if (!TEST) {
     const icon = nativeImage.createFromPath(
-      path.join(__dirname, "assets", "icon.png"),
+      path.join(__dirname, "..", "assets", "icon.png"),
     );
     tray = new Tray(icon);
     tray.setToolTip("Jot · Today / Todo / 完成日志");
