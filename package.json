@@ -1,0 +1,25 @@
+{
+  "name": "jot-desktop",
+  "productName": "Jot",
+  "version": "0.6.9",
+  "description": "Jot",
+  "main": "main.js",
+  "author": "Jot",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/core.test.js test/stream.test.cjs test/personality.test.cjs test/journal.test.cjs test/anthropic.test.cjs",
+    "test:ui": "node test/v05-ui.cjs",
+    "package": "node build.cjs"
+  },
+  "devDependencies": {
+    "@electron/packager": "20.4.0",
+    "electron": "44.4.3",
+    "playwright": "1.63.0"
+  },
+  "dependencies": {
+    "dompurify": "3.4.16",
+    "image-size": "^2.0.4",
+    "markdown-it": "15.0.2"
+  }
+}

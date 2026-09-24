@@ -1,0 +1,4 @@
+.capsule-logo{display:none;width:29px;height:29px;pointer-events:none;filter:invert(1)}
+#pet.dot.logo-skin .capsule-wordmark{display:none}
+#pet.dot.logo-skin .capsule-logo{display:block}
+#pet.dot.logo-skin.white .capsule-logo{filter:none}

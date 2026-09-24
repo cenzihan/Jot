@@ -1,0 +1,2 @@
+const {test}=require('node:test'),assert=require('node:assert/strict');const {personality,styles}=require('../personality');
+test('four selectable styles and appended custom system prompt',()=>{assert.equal(Object.keys(styles).length,4);assert.match(personality({}),/Jot 风格/);assert.match(personality({style:'precise',systemPrompt:'称呼我为同学'}),/严谨执行/);assert.match(personality({style:'custom',systemPrompt:'称呼我为同学'}),/称呼我为同学/);});

@@ -1,0 +1,35 @@
+/* Individual Today rows retain the quiet paper aesthetic while separating actions. */
+.jot-task-list{display:grid;gap:8px;margin:9px 0 3px}
+.jot-task-list .jot-task{min-height:68px;padding:10px 13px;border:1px solid #e8e9ec;border-radius:12px;background:#fff;box-shadow:0 1px 2px #15161a06}
+.jot-task-list .jot-task:hover{background:#fafafb;border-color:#d9dbe0;box-shadow:0 3px 10px #15161a0b}
+.jot-task-list .jot-task.jot-done{background:#f8f9f8}
+@media(max-width:600px){.jot-task-list .jot-task{padding:9px 10px;min-height:64px}}
+
+/* Assistant Markdown is parsed with HTML disabled and sanitized before insertion. */
+.message-body{white-space:pre-wrap;overflow-wrap:anywhere}
+.message.assistant .message-body{white-space:normal}
+.message-body>*:first-child{margin-top:0}
+.message-body>*:last-child{margin-bottom:0}
+.message-body p{margin:0 0 9px}
+.message-body ul,.message-body ol{margin:7px 0 10px;padding-left:20px}
+.message-body li{margin:3px 0}
+.message-body li>p{margin:0}
+.message-body h1,.message-body h2,.message-body h3,.message-body h4{font-size:13px;font-weight:660;letter-spacing:0;margin:13px 0 5px;line-height:1.5}
+.message-body blockquote{margin:8px 0;padding:3px 10px;border-left:2px solid #d5d7dc;color:#6e7179}
+.message-body pre{max-width:100%;overflow:auto;margin:8px 0;padding:9px 10px;border-radius:8px;background:#f4f4f6;font-size:11px;line-height:1.55}
+.message-body :not(pre)>code{padding:1px 4px;border-radius:4px;background:#f2f2f4;font-size:11px}
+.message-body table{border-collapse:collapse;max-width:100%;display:block;overflow:auto;margin:9px 0;font-size:11px}
+.message-body th,.message-body td{border:1px solid #e5e6e9;padding:4px 7px;text-align:left}
+.chat-changes{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px;padding-top:9px;border-top:1px solid #eeeef0}
+.chat-changes>span{width:100%;font-size:10px;color:#777a82}
+
+/* The collapsed and expanded controls occupy the same bottom-right anchor. */
+.chat-expanded #chat-close{display:none!important}
+#chat-collapse-pill{display:none}
+.chat-expanded .composer{margin-bottom:54px}
+.chat-expanded #chat-collapse-pill{display:flex;position:absolute;right:8px;bottom:12px;align-items:center;justify-content:center;gap:10px;min-width:166px;height:43px;padding:0 15px;border:1px solid #303135;border-radius:23px;background:#222326;color:#fff;box-shadow:0 5px 17px #0000001d;z-index:7;transition:transform .2s var(--jot-ease),background .2s var(--jot-ease)}
+#chat-collapse-pill:hover{background:#33353a;transform:translateY(-2px)}
+#chat-collapse-pill .launcher-wordmark{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:20px;font-weight:600;letter-spacing:-.075em;line-height:1;padding-right:4px}
+#chat-collapse-pill .launcher-wordmark em{font-size:13px;font-weight:400;letter-spacing:-.045em}
+#chat-collapse-pill .launcher-chevron{font-size:21px;font-weight:300;line-height:1;margin-left:4px}
+.chat-context-count{font-size:10px;color:#8f929a;white-space:nowrap;border:1px solid #eaebee;border-radius:10px;padding:3px 6px}

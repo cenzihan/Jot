@@ -1,0 +1,15 @@
+/* Quiet semantic color: type first, completion/urgency second. */
+.jot-cal-item{border-left:2px solid transparent;max-width:100%;line-height:1.35}
+.jot-cal-item.today{background:#eaf0f6;color:#3e607e;border-left-color:#7495b3}
+.jot-cal-item.note{background:#f0eef7;color:#696286;border-left-color:#aaa1c6}
+.jot-cal-item.deadline{background:#f7f0e7;color:#886747;border-left-color:#c6a477}
+.jot-cal-item.done{background:#eaf3ed;color:#4e715c;border-left-color:#82a68a}
+.jot-cal-item.deadline.overdue{background:#f8eceb;color:#9a5955;border-left-color:#ca8882}
+.jot-cal-item.deadline.done{background:#edf1ec;color:#718071;border-left-color:#a8b7a6}
+.jot-calendar-legend{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;padding:10px 1px 0;color:#777b83;font-size:10px}
+.jot-calendar-legend span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.jot-calendar-legend span::before{content:"";width:7px;height:7px;border-radius:2px;background:#7495b3}
+.jot-calendar-legend .done::before{background:#82a68a}
+.jot-calendar-legend .note::before{background:#aaa1c6}
+.jot-calendar-legend .deadline::before{background:#c6a477}
+.jot-calendar-legend .overdue::before{background:#ca8882}
