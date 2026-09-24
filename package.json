@@ -2,7 +2,7 @@
   "name": "jot-desktop",
   "productName": "Jot",
   "version": "0.6.10",
-  "description": "Jot",
+  "description": "A minimal Todo agent that turns everyday progress into a journal with AI. 一个极简 Todo agent，让 AI 把每天的进展自然整理成日志。",
   "main": "src/main.js",
   "author": "Jot",
   "license": "MIT",
