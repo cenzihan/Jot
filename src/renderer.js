@@ -52,7 +52,7 @@ oldModelLabel.replaceWith(modelButton);
 modelButton.insertAdjacentHTML('afterend','<div id="chat-model-menu" class="chat-model-menu" role="menu" aria-label="对话模型" hidden></div>');
 $('.chat').insertAdjacentHTML('afterbegin','<button id="chat-launcher" type="button" aria-label="打开 Jot 对话" title="打开 Jot 对话"><span class="launcher-wordmark">Jot <em>it!</em></span><span class="launcher-chevron" aria-hidden="true">›</span></button>');
 $('.chat').insertAdjacentHTML('beforeend','<button id="chat-collapse-pill" type="button" aria-label="收起 Jot 对话" title="收起对话"><span class="launcher-wordmark">Jot <em>it!</em></span><span class="launcher-chevron" aria-hidden="true">‹</span></button>');
-$('.chat-caption').insertAdjacentHTML('beforebegin','<span id="chat-context-count" class="chat-context-count" title="每次最多发送最近 20 条对话，另附近期记录；不是模型 token 上限，也未启用自动摘要">对话 0/20</span>');
+$('.chat-caption').insertAdjacentHTML('beforebegin','<span id="chat-context-count" class="chat-context-count" title="每次最多发送最近 20 条对话，另附已保存的近期摘要；不是模型 token 上限">对话 0/20</span>');
 $('#chat-input').placeholder='问 Jot，或请它帮你记一件事…';
 let cachedChatModels=null,cachedModelProvider='',chatModelSearch='';
 async function call(name, args) {
@@ -73,11 +73,15 @@ function fail(e) {
   toast(e.message || String(e));
 }
 function modelProviderKey(){return `${state.settings.chat.baseUrl}|${state.settings.chat.format||'openai'}`;}
+function profileMenuHTML(){
+  const chat=state.settings.chat,profiles=chat.profiles||[];
+  return `<div class="model-menu-profiles"><strong>已保存配置</strong>${profiles.map(p=>`<button type="button" data-profile-use="${esc(p.id)}" class="${p.id===chat.activeProfileId?'selected':''}"><span>${esc(p.name)}</span><small>${esc(p.model)}</small></button>`).join('')||'<p class="model-menu-state">尚未保存配置</p>'}</div>`;
+}
 function renderChatModelMenu(){
   const menu=$('#chat-model-menu');
-  if(!cachedChatModels){menu.innerHTML='<div class="model-menu-state">正在读取模型…</div>';return;}
+  if(!cachedChatModels){menu.innerHTML=profileMenuHTML()+'<div class="model-menu-state">正在读取模型…</div>';return;}
   const filtered=cachedChatModels.filter(m=>`${m.id} ${m.name}`.toLowerCase().includes(chatModelSearch.toLowerCase())).slice(0,100);
-  menu.innerHTML=`<label class="model-menu-search">切换模型<input id="chat-model-search" type="search" placeholder="搜索模型" value="${esc(chatModelSearch)}" autocomplete="off"></label><div class="model-menu-list">${filtered.map(m=>`<button type="button" role="menuitem" data-chat-model="${esc(m.id)}" class="${m.id===state.settings.chat.model?'selected':''}"><span>${esc(m.name)}</span><small>${esc(m.id)}</small></button>`).join('')||'<p class="model-menu-state">没有匹配的模型</p>'}</div><button type="button" class="model-menu-settings" data-page="settings">在设置中手动填写或更换服务商 →</button><p class="model-menu-hint">仅列出接口返回的模型；部分模型可能不支持聊天或工具。</p>`;
+  menu.innerHTML=profileMenuHTML()+`<label class="model-menu-search">切换模型<input id="chat-model-search" type="search" placeholder="搜索当前接口的模型" value="${esc(chatModelSearch)}" autocomplete="off"></label><div class="model-menu-list">${filtered.map(m=>`<button type="button" role="menuitem" data-chat-model="${esc(m.id)}" class="${m.id===state.settings.chat.model?'selected':''}"><span>${esc(m.name)}</span><small>${esc(m.id)}</small></button>`).join('')||'<p class="model-menu-state">没有匹配的模型</p>'}</div><button type="button" class="model-menu-settings" data-page="settings">管理模型配置 →</button>`;
 }
 async function toggleChatModelMenu(){
   const menu=$('#chat-model-menu');
@@ -88,7 +92,7 @@ async function toggleChatModelMenu(){
   renderChatModelMenu();
   if(cachedChatModels){$('#chat-model-search')?.focus();return;}
   try{cachedChatModels=await call('models-list',{baseUrl:state.settings.chat.baseUrl,format:state.settings.chat.format||'openai'});if(menu.hidden)return;renderChatModelMenu();$('#chat-model-search')?.focus();}
-  catch(error){if(menu.hidden)return;menu.innerHTML=`<p class="model-menu-state">${esc(error.message||'模型列表暂不可用')}</p><button type="button" class="model-menu-settings" data-page="settings">打开设置手动填写 →</button>`;}
+  catch(error){if(menu.hidden)return;menu.innerHTML=profileMenuHTML()+`<p class="model-menu-state">${esc(error.message||'模型列表暂不可用')}</p><button type="button" class="model-menu-settings" data-page="settings">管理模型配置 →</button>`;}
 }
 async function refresh(force = false) {
   if(force)cachedChatModels=null;
@@ -432,6 +436,12 @@ document.addEventListener("click", async (e) => {
       $('#chat-model-menu').hidden=true;modelButton.setAttribute('aria-expanded','false');
       navigate(b.dataset.page);
       return;
+    }
+    if(b.dataset.profileUse){
+      if(chatBusy){toast('当前回复结束后再切换配置');return;}
+      await call('profile-use',b.dataset.profileUse);
+      cachedChatModels=null;$('#chat-model-menu').hidden=true;modelButton.setAttribute('aria-expanded','false');
+      await refresh();render();toast('已切换模型配置');return;
     }
     if(b.dataset.chatModel){
       if(chatBusy){toast('当前回复结束后再切换模型');return;}

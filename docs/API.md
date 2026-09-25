@@ -65,6 +65,10 @@ Jot **没有公开的 HTTP 服务**。下述 `manage_record` 是应用发给所�
 | --- | --- | --- |
 | `state` | 无 | 当前记录与脱敏配置的只读快照 |
 | `models-list` | `{baseUrl, format, key?}` | 只读查询该服务的 `GET /models`，返回 `{id,name}[]`；不保存选择 |
+| `connection-test` | `{baseUrl, model, format, key?, profileId?}` | 对所选模型发送一条简短的无工具对话，返回耗时；不保存聊天或记录 |
+| `profile-save` | `{id?, name, baseUrl, model, format, key?}` | 新建或修改对话配置；密钥独立加密，留空保留同地址的现有密钥 |
+| `profile-use` | 配置 ID | 原子切换地址、模型、格式与加密密钥；当前对话结束后才允许切换 |
+| `profile-remove` | 配置 ID | 删除保存的配置；不清空当前对话设置 |
 | `panel-chat-layout` | `true` / `false` | 展开/收起右侧聊天栏；空间足够时调整面板宽度，返回是否使用覆盖模式 |
 | `action` | 上述记录操作对象 | 立即落盘，返回可撤销事件 ID |
 | `undo` | 事件 ID | 撤销未被后续修改覆盖的操作 |
@@ -79,7 +83,9 @@ Jot **没有公开的 HTTP 服务**。下述 `manage_record` 是应用发给所�
 
 完整白名单见 `src/preload.js`。状态变更广播 `changed`；聊天流通过 `chat-progress` 发送 `reset`、`text`、`status`、`done`。IPC 不是外部 API，不应向任意远程网页暴露。
 
-记忆卡通过 `settings.chat.memoryStable`（最多 1500 字）和 `settings.chat.memoryRecent`（最多 1000 字）保存。两者在对话时作为低于当前任务规则的背景信息提供给模型；不会自动改动 Todo、Today 或日志。设置界面采用分栏和自动保存：一般选项改变即保存，长文本停止输入后保存，密钥失焦后保存。自动生成近期摘要需要用户主动点击；结果保存前不会影响对话，界面提供撤销。
+记忆卡通过 `settings.chat.memoryStable`（最多 1500 字）和 `settings.chat.memoryRecent`（最多 1000 字）保存。稳定偏好只由用户手动维护；`memoryAuto` 默认开启，每累计约 10 条有效对话使用当前模型滚动更新近期摘要。摘要请求不提供管理工具，也不会改动 Todo、Today 或日志；用户仍可手动生成、编辑、清空近期摘要。两种记忆在对话时仅作为背景信息。设置界面采用分栏和自动保存。
+
+旧版单一对话配置首次启动时迁移为 `settings.chat.profiles` 的第一项，密钥保持原有本地加密状态。渲染进程只能读取每项的 `hasKey`，不能读取密钥。更换 API 地址时，当前配置会与原配置解除关联，原卡片及其密钥保留；一键启用某张卡片时四项连接参数一并切换。配置卡片与连接测试不影响独立的语音识别设置。
 
 ## 服务商格式
 

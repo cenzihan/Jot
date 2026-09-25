@@ -21,6 +21,7 @@ const fs = require("node:fs"),
   { randomUUID } = require("node:crypto");
 const { Store, stats } = require("./core");
 const { Services } = require("./services");
+const {normalizeChatProfiles,profileSave,profileUse,profileRemove,syncActiveProfile,validateProfile}=require('./profiles');
 const { readPet, listPets } = require("./pets");
 const TEST = process.env.SHIBAN_TEST === "1";
 if (TEST && process.env.SHIBAN_TEST_DIR)
@@ -95,6 +96,7 @@ function publicState() {
     s.settings[key].hasKey = !!s.settings[key].key;
     delete s.settings[key].key;
   }
+  s.settings.chat.profiles=(s.settings.chat.profiles||[]).map(({key,...profile})=>({...profile,hasKey:!!key}));
   for (const source of s.sources) delete source.seen;
   s.history = s.history
     .slice(-100)
@@ -137,6 +139,11 @@ function handle(name, fn) {
 }
 async function start() {
   store = new Store(app.getPath("userData"));
+  const chat=store.state.settings.chat;
+  const migrated=normalizeChatProfiles(chat);
+  const memoryMigrated=chat.memoryAuto===undefined;
+  if(memoryMigrated)chat.memoryAuto=true;
+  if(migrated||memoryMigrated)store.save();
   if(!store.state.settings.jotCapsuleApplied){
     store.state.settings.minimal=true;
     store.state.settings.motion=false;
@@ -251,6 +258,22 @@ async function start() {
   });
   handle("state", () => publicState());
   handle("models-list", (config) => services.listModels(config));
+  handle('connection-test',(config)=>services.testConnection(config));
+  handle('profile-save',async input=>{
+    const chat=store.state.settings.chat;
+    const value=validateProfile(input);
+    if(input.key!==undefined&&(typeof input.key!=='string'||input.key.length>4000))throw Error('密钥格式不正确');
+    const sameCurrent=chat.baseUrl?.replace(/\/+$/,'')===value.baseUrl&&chat.format===value.format;
+    const encrypted=input.clearKey?'':(input.key?.trim()?await encrypt(input.key.trim()):(!input.id&&sameCurrent?chat.key||'':undefined));
+    const id=profileSave(chat,{...value,id:input.id},encrypted);
+    if(chat.activeProfileId===id)profileUse(chat,id);
+    store.save();changed();return id;
+  });
+  handle('profile-use',id=>{
+    if(services.busy)throw Error('请等待当前对话结束后切换');
+    const item=profileUse(store.state.settings.chat,id);store.save();changed();return {id:item.id,name:item.name};
+  });
+  handle('profile-remove',id=>{profileRemove(store.state.settings.chat,id);store.save();changed();return true;});
   handle("action", (a) => {
     const result = store.act(a);
     changed();
@@ -273,6 +296,7 @@ async function start() {
       if(!['openai','anthropic'].includes(incoming.chat.format))throw Error('未知对话接口格式');
       candidate.chat.format=incoming.chat.format;
     }
+    if(incoming.chat?.memoryAuto!==undefined)candidate.chat.memoryAuto=!!incoming.chat.memoryAuto;
     if(incoming.chat?.systemPrompt!==undefined){
       if(typeof incoming.chat.systemPrompt!=='string'||incoming.chat.systemPrompt.length>8000)throw Error('System Prompt 最多 8000 字');
       candidate.chat.systemPrompt=incoming.chat.systemPrompt.trim();
@@ -325,6 +349,7 @@ async function start() {
           throw Error("免打扰小时须为0至23");
         candidate[k] = n;
       }
+    syncActiveProfile(candidate.chat,store.state.settings.chat);
     store.state.settings = candidate;
     store.save();
     panel.setAlwaysOnTop(candidate.alwaysOnTop);

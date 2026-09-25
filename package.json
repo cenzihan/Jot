@@ -1,14 +1,14 @@
 {
   "name": "jot-desktop",
   "productName": "Jot",
-  "version": "0.6.10",
+  "version": "0.6.11",
   "description": "A minimal Todo agent that turns everyday progress into a journal with AI. 一个极简 Todo agent，让 AI 把每天的进展自然整理成日志。",
   "main": "src/main.js",
   "author": "Jot",
   "license": "MIT",
   "scripts": {
     "start": "electron .",
-    "test": "node --test test/core.test.js test/stream.test.cjs test/personality.test.cjs test/journal.test.cjs test/anthropic.test.cjs",
+    "test": "node --test test/core.test.js test/stream.test.cjs test/personality.test.cjs test/journal.test.cjs test/anthropic.test.cjs test/profiles.test.cjs",
     "test:ui": "node test/v05-ui.cjs",
     "package": "node build.cjs"
   },
@@ -20,6 +20,7 @@
   "dependencies": {
     "dompurify": "3.4.16",
     "image-size": "^2.0.4",
-    "markdown-it": "15.0.2"
+    "markdown-it": "15.0.2",
+    "simple-icons": "16.32.0"
   }
 }

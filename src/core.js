@@ -12,7 +12,7 @@ function date(value) {
   if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T/.test(value) || !Number.isFinite(Date.parse(value))) throw Error('请提供有效的日期和时间');
   return new Date(value).toISOString();
 }
-function empty() { return {version:1,todos:[],todayActions:[],ddls:[],logs:[],notes:[],drafts:[],history:[],messages:[],sources:[],reminded:{},settings:{chat:{baseUrl:'',model:'',key:'',format:'openai',memoryStable:'',memoryRecent:''},speech:{mode:'cloud',baseUrl:'https://api.groq.com/openai/v1',model:'whisper-large-v3-turbo',key:'',exe:'',modelPath:''},pet:null,minimal:false,capsuleTheme:'black',motion:true,alwaysOnTop:false,notifications:true,quietStart:23,quietEnd:8,autoSummarize:false,position:null}}; }
+function empty() { return {version:1,todos:[],todayActions:[],ddls:[],logs:[],notes:[],drafts:[],history:[],messages:[],sources:[],reminded:{},settings:{chat:{baseUrl:'',model:'',key:'',format:'openai',profiles:[],activeProfileId:null,memoryStable:'',memoryRecent:'',memoryAuto:true},speech:{mode:'cloud',baseUrl:'https://api.groq.com/openai/v1',model:'whisper-large-v3-turbo',key:'',exe:'',modelPath:''},pet:null,minimal:false,capsuleTheme:'black',motion:true,alwaysOnTop:false,notifications:true,quietStart:23,quietEnd:8,autoSummarize:false,position:null}}; }
 class Store {
   constructor(dir) {
     this.dir=dir; this.file=path.join(dir,'data.json'); fs.mkdirSync(dir,{recursive:true});
