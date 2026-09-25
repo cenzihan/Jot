@@ -135,7 +135,7 @@ function render() {
   const model=state.settings.chat.model||"未配置模型";
   $("#model-label").textContent = model.includes("luna")?"Luna":model.split("/").at(-1);
   $("#model-label").title=model;
-  $("#completion-count").hidden=page!=="today";
+  $("#completion-count").hidden=true;
   $("#completion-count").textContent=`已完成 ${state.stats.today} 项`;
   $("#add-main").hidden = ["settings", "sources"].includes(page);
   $("#add-main").title = page === "log" ? "＋ 记录完成" : ['today','calendar'].includes(page) ? "＋ 添加今日行动" : "＋ 添加长期 Todo";
@@ -678,6 +678,7 @@ $("#edit-form").addEventListener("submit", async (e) => {
   if (kind === "log")
     data.completedAt = new Date(f.elements.completedAt.value).toISOString();
   try {
+    const previousToday=kind==='today'&&!id?new Set(state.todayActions.map(x=>x.id)):null;
     const event = await call("action", {
       kind,
       op: id ? "update" : "add",
@@ -687,6 +688,7 @@ $("#edit-form").addEventListener("submit", async (e) => {
     $("#editor").close();
     toast("已保存", event);
     await refresh();
+    if(previousToday)jotSuggestNewToday(previousToday);
   } catch (err) {
     fail(err);
   }
@@ -735,6 +737,7 @@ document.addEventListener("submit", async (e) => {
 async function send() {
   const input = $("#chat-input").value.trim();
   if (!input || chatBusy || recording || transcribing) return;
+  const previousToday=new Set(state.todayActions.map(x=>x.id));
   expandChat(true);
   chatBusy = true;
   $("#send").disabled = true;
@@ -752,6 +755,7 @@ async function send() {
     $("#send").hidden = false;
     $("#cancel-chat").hidden = true;
     await refresh();
+    jotSuggestNewToday(previousToday);
   }
 }
 $("#chat-input").addEventListener("keydown", (e) => {

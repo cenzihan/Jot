@@ -52,3 +52,15 @@ test('auto memory keeps stable preferences separate and runs after ten messages'
   await service.autoRefreshMemory();assert.equal(chat.memoryRecent,'新的近期摘要');assert.equal(chat.memoryStable,'请说中文');assert.equal(store.saved,true);
   store.saved=false;await service.autoRefreshMemory();assert.equal(store.saved,false);
 });
+test('Todo link suggestion is read-only and accepts only an existing active ID',async()=>{
+  const action={id:'today-1',title:'写报告大纲',notes:'',status:'open',todoId:null};
+  const todo={id:'todo-1',title:'课程报告',notes:'',status:'open'};
+  const state={todayActions:[action],todos:[todo],settings:{chat:{baseUrl:'https://example.com/v1',model:'demo',format:'openai',key:''}}};
+  const service=new Services({state},async()=>'',async()=>Response.json({choices:[{message:{content:JSON.stringify({todoId:'todo-1',reason:'报告大纲是课程报告的一部分'})}}]}));
+  assert.deepEqual(await service.suggestTodoLink('today-1'),{todayId:'today-1',todoId:'todo-1',reason:'报告大纲是课程报告的一部分'});
+  assert.equal(action.todoId,null);
+  service.fetch=async()=>Response.json({choices:[{message:{content:'{"todoId":"invented","reason":"无依据"}'}}]});
+  assert.equal(await service.suggestTodoLink('today-1'),null);
+  action.todoId='todo-1';
+  assert.equal(await service.suggestTodoLink('today-1'),null);
+});

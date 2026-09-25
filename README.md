@@ -10,7 +10,7 @@
 
 Jot is a minimal Windows desktop Todo agent. It stays as a small, draggable capsule until you need it. Open it to plan your day, keep longer-term Todos, or talk to an AI that can help organize both. **The journal grows from completed actions**, so you can look back on your work without maintaining a separate log by hand.
 
-![Jot Today view with the AI conversation open](docs/images/chat.png)
+![Jot Today view with focused actions, progress, a collapsed completed section, and the AI conversation](docs/images/chat.png)
 
 ## ✨ Why Jot?
 
@@ -20,9 +20,9 @@ You can add and check off items yourself, or simply tell Jot what happened. With
 
 ## What you can do
 
-- 📅 **Today and Todo, each in its place.** Keep short-term actions away from longer-term plans. Add planned dates and optional deadlines; see scheduled items in the day, week, or month calendar.
+- 📅 **Today and Todo, each in its place.** Keep short-term actions away from longer-term plans. Today puts unfinished actions first, folds completed ones away, and keeps quick notes separate. See your plans and records in the day, week, or month calendar.
 - 📓 **A journal that follows your work.** Completed actions appear in the journal with simple counts. Add a completion note when you want more context. Ordinary quick notes remain separate from completed work.
-- ✨ **AI that helps with the organizing.** Save multiple OpenAI-compatible or Anthropic model profiles, test each connection, and switch in one click. Manage records through a streaming conversation; Jot can also summarize selected local Codex, Claude, or other supported agent records.
+- ✨ **AI that helps with the organizing.** Save multiple OpenAI-compatible or Anthropic model profiles, test each connection, and switch in one click. Manage records through a streaming conversation; Jot can suggest linking a new Today action to an existing Todo, with your confirmation. It can also summarize selected local Codex, Claude, or other supported agent records.
 - 🧠 **A small, useful memory.** Keep stable preferences in your own words while Jot automatically refreshes a short summary of recent conversations. The summary does not change your tasks or journal.
 - 🎙️ **Voice when typing is inconvenient.** Speech recognition has its own configuration. Review and edit the transcript before sending it to chat.
 - 🖤 **A calm desktop presence.** The Black Default capsule is small and still. Open it with a click or shortcut, switch to a white capsule, or import a compatible Codex Pet skin.

@@ -21,7 +21,7 @@ settingsView=function(){
   const layout=document.createElement('div');layout.className='jot-settings-layout';layout.append(tabs,content);
   const status=document.createElement('p');status.className='jot-settings-status';status.id='settings-status';status.setAttribute('role','status');status.textContent='更改会自动保存';content.prepend(status);
   layout.querySelector('.settings-section .hint')?.setAttribute('data-note','autosave');
-  return layout.outerHTML.replaceAll('选择后点击“保存所有设置”生效','选择后立即生效').replaceAll('保存后从下一条消息生效','修改后从下一条消息生效').replace('Jot 0.6.7','Jot 0.6.11');
+  return layout.outerHTML.replaceAll('选择后点击“保存所有设置”生效','选择后立即生效').replaceAll('保存后从下一条消息生效','修改后从下一条消息生效').replace('Jot 0.6.7','Jot 0.6.12');
 };
 
 let settingsTab=localStorage.getItem('jotSettingsTab')||'model';

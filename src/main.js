@@ -258,6 +258,7 @@ async function start() {
   });
   handle("state", () => publicState());
   handle("models-list", (config) => services.listModels(config));
+  handle('link-suggest',(todayId)=>services.suggestTodoLink(todayId));
   handle('connection-test',(config)=>services.testConnection(config));
   handle('profile-save',async input=>{
     const chat=store.state.settings.chat;
